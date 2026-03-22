@@ -1,14 +1,16 @@
 using RainfallCalculator.Console.Models;
 using RainfallCalculator.Console.Services;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace RainFallCalculator.Tests;
 
+[TestClass]
 public class RainfallAnalyzerTests
 {
     private static readonly DateTime CurrentTime = new(2020, 6, 5, 14, 0, 0);
     private readonly RainfallAnalyzer _analyzer = new();
 
-    [Fact]
+    [TestMethod]
     public void GetCurrentTime_ReturnsLatestReadingTime()
     {
         var readings = new List<RainfallReading>
@@ -20,10 +22,10 @@ public class RainfallAnalyzerTests
 
         var currentTime = _analyzer.GetCurrentTime(readings);
 
-        Assert.Equal(CurrentTime, currentTime);
+        Assert.AreEqual(CurrentTime, currentTime);
     }
 
-    [Fact]
+    [TestMethod]
     public void BuildSummaries_IgnoresReadingsOlderThanFourHours()
     {
         var summary = BuildSummary(
@@ -31,31 +33,31 @@ public class RainfallAnalyzerTests
             CreateReading(10, 10m),
             CreateReading(14, 10m));
 
-        Assert.Equal(10m, summary.AverageRainfallLast4Hours);
-        Assert.Equal("Amber", summary.Status);
+        Assert.AreEqual(10m, summary.AverageRainfallLast4Hours);
+        Assert.AreEqual("Amber", summary.Status);
     }
 
-    [Fact]
+    [TestMethod]
     public void BuildSummaries_ReturnsGreenWhenAverageIsBelowTen()
     {
         var summary = BuildSummary(
             CreateReading(10, 4m),
             CreateReading(12, 6m));
 
-        Assert.Equal("Green", summary.Status);
+        Assert.AreEqual("Green", summary.Status);
     }
 
-    [Fact]
+    [TestMethod]
     public void BuildSummaries_ReturnsRedWhenAverageIsAtLeastFifteen()
     {
         var summary = BuildSummary(
             CreateReading(10, 16m),
             CreateReading(12, 14m));
 
-        Assert.Equal("Red", summary.Status);
+        Assert.AreEqual("Red", summary.Status);
     }
 
-    [Fact]
+    [TestMethod]
     public void BuildSummaries_ReturnsRedWhenAnyReadingIsAboveThirty()
     {
         var summary = BuildSummary(
@@ -64,11 +66,11 @@ public class RainfallAnalyzerTests
             CreateReading(12, 0m),
             CreateReading(13, 31m));
 
-        Assert.Equal(7.75m, summary.AverageRainfallLast4Hours);
-        Assert.Equal("Red", summary.Status);
+        Assert.AreEqual(7.75m, summary.AverageRainfallLast4Hours);
+        Assert.AreEqual("Red", summary.Status);
     }
 
-    [Fact]
+    [TestMethod]
     public void BuildSummaries_ReturnsIncreasingTrendWhenRecentReadingsAreHigher()
     {
         var summary = BuildSummary(
@@ -77,17 +79,17 @@ public class RainfallAnalyzerTests
             CreateReading(12, 8m),
             CreateReading(13, 8m));
 
-        Assert.Equal("Increasing", summary.Trend);
+        Assert.AreEqual("Increasing", summary.Trend);
     }
 
-    [Fact]
+    [TestMethod]
     public void BuildSummaries_ReturnsNoDataWhenOneTrendHalfHasNoReadings()
     {
         var summary = BuildSummary(
             CreateReading(12, 8m),
             CreateReading(13, 8m));
 
-        Assert.Equal("No data", summary.Trend);
+        Assert.AreEqual("No data", summary.Trend);
     }
 
     private DeviceSummary BuildSummary(params RainfallReading[] readings)
@@ -97,7 +99,8 @@ public class RainfallAnalyzerTests
             readings.ToList(),
             CurrentTime);
 
-        return Assert.Single(summaries);
+        Assert.AreEqual(1, summaries.Count);
+        return summaries[0];
     }
 
     private static Device CreateDevice()

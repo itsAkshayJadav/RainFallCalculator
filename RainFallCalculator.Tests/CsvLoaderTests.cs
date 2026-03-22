@@ -1,13 +1,15 @@
 using RainfallCalculator.Console.Models;
 using RainfallCalculator.Console.Services;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace RainFallCalculator.Tests;
 
+[TestClass]
 public class CsvLoaderTests
 {
     private readonly CsvLoader _loader = new();
 
-    [Fact]
+    [TestMethod]
     public void LoadDevices_IgnoresDuplicateDeviceIdsAndAddsWarning()
     {
         var folderPath = CreateTestFolder();
@@ -26,9 +28,9 @@ public class CsvLoaderTests
 
             var devices = _loader.LoadDevices(folderPath, warnings);
 
-            var device = Assert.Single(devices);
-            Assert.Equal("10451", device.DeviceId);
-            Assert.Contains(warnings, warning => warning.Contains("duplicate device id '10451'"));
+            Assert.AreEqual(1, devices.Count);
+            Assert.AreEqual("10451", devices[0].DeviceId);
+            Assert.IsTrue(warnings.Any(warning => warning.Contains("duplicate device id '10451'")));
         }
         finally
         {
@@ -36,7 +38,7 @@ public class CsvLoaderTests
         }
     }
 
-    [Fact]
+    [TestMethod]
     public void LoadRainfallReadings_SkipsInvalidRowsAndReturnsOnlyValidReadings()
     {
         var folderPath = CreateTestFolder();
@@ -67,15 +69,15 @@ public class CsvLoaderTests
 
             var readings = _loader.LoadRainfallReadings(folderPath, devices, warnings);
 
-            var reading = Assert.Single(readings);
-            Assert.Equal("10451", reading.DeviceId);
-            Assert.Equal(new DateTime(2020, 6, 5, 10, 0, 0), reading.Time);
-            Assert.Equal(5m, reading.Rainfall);
-            Assert.Contains(warnings, warning => warning.Contains("unknown device id '99999'"));
-            Assert.Contains(warnings, warning => warning.Contains("invalid timestamp 'not-a-date'"));
-            Assert.Contains(warnings, warning => warning.Contains("too far in the future"));
-            Assert.Contains(warnings, warning => warning.Contains("invalid rainfall value '2k4'"));
-            Assert.Contains(warnings, warning => warning.Contains("negative rainfall ignored"));
+            Assert.AreEqual(1, readings.Count);
+            Assert.AreEqual("10451", readings[0].DeviceId);
+            Assert.AreEqual(new DateTime(2020, 6, 5, 10, 0, 0), readings[0].Time);
+            Assert.AreEqual(5m, readings[0].Rainfall);
+            Assert.IsTrue(warnings.Any(warning => warning.Contains("unknown device id '99999'")));
+            Assert.IsTrue(warnings.Any(warning => warning.Contains("invalid timestamp 'not-a-date'")));
+            Assert.IsTrue(warnings.Any(warning => warning.Contains("too far in the future")));
+            Assert.IsTrue(warnings.Any(warning => warning.Contains("invalid rainfall value '2k4'")));
+            Assert.IsTrue(warnings.Any(warning => warning.Contains("negative rainfall ignored")));
         }
         finally
         {
