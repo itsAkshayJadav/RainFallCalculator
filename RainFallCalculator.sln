@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RainFallCalculator.Console", "RainFallCalculator.Console\RainFallCalculator.Console.csproj", "{BB1B6F4C-0036-4D1A-95D7-7CD5E3EACC69}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RainFallCalculator.Tests", "RainFallCalculator.Tests\RainFallCalculator.Tests.csproj", "{0A0D6C8B-9141-4B50-8F97-24AF7F29A3C3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{BB1B6F4C-0036-4D1A-95D7-7CD5E3EACC69}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BB1B6F4C-0036-4D1A-95D7-7CD5E3EACC69}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BB1B6F4C-0036-4D1A-95D7-7CD5E3EACC69}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A0D6C8B-9141-4B50-8F97-24AF7F29A3C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A0D6C8B-9141-4B50-8F97-24AF7F29A3C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A0D6C8B-9141-4B50-8F97-24AF7F29A3C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A0D6C8B-9141-4B50-8F97-24AF7F29A3C3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
